@@ -335,6 +335,19 @@ select.inp{appearance:none;background-image:linear-gradient(45deg,transparent 50
 .ccard.sinstock .ccard-img img{opacity:.45}
 .ccard-out{font:600 12px var(--f-ui);color:var(--bad)}
 
+/* ---------- entrada con Google ---------- */
+.login{position:fixed;inset:0;z-index:70;background:var(--bg);display:flex;align-items:center;justify-content:center;padding-inline:16px;padding-block:24px;overflow-y:auto}
+.login-box{width:100%;max-width:380px;display:flex;flex-direction:column;align-items:center;gap:14px;text-align:center}
+.login-box svg.koala{width:96px;height:96px}
+.login-box h1{font-size:26px;letter-spacing:-.01em}
+.login-box h1 b{color:var(--accent)}
+.login-box p{margin:0;color:var(--fg-2);line-height:1.5}
+.login-msg{color:var(--warn)!important;font-size:14px;min-height:1.4em}
+.gbtn{display:inline-flex;align-items:center;justify-content:center;gap:10px;width:100%;min-height:54px;border-radius:12px;background:#fff;color:#1f1f1f;font-weight:600;font-size:16px;border:1px solid #dadce0}
+.gbtn:disabled{opacity:.6;cursor:default}
+.gbtn svg{width:20px;height:20px}
+.sync[data-st="offline"] i{background:var(--fg-3)}
+
 /* ---------- avisos ---------- */
 .toast{position:fixed;left:50%;bottom:calc(86px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:80;width:max-content;max-width:calc(100% - 32px);display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:12px;background:var(--surface-3);border:1px solid var(--line-2);box-shadow:0 10px 30px rgba(0,0,0,.45);font-size:14px}
 .toast[data-kind="ok"]{border-color:rgba(63,207,142,.5)}
@@ -751,6 +764,27 @@ select.inp{appearance:none;background-image:linear-gradient(45deg,transparent 50
       <button class="btn" type="button" id="cam-torch" hidden><svg class="i"><use href="#i-flash"/></svg>Linterna</button>
       <button class="btn primary" type="button" id="cam-photo"><svg class="i"><use href="#i-photo"/></svg>Sacar foto</button>
     </div>
+  </div>
+</div>
+
+<!-- ===================== ENTRAR CON GOOGLE ===================== -->
+<div class="login" id="login" hidden>
+  <div class="login-box">
+    <svg class="koala" viewBox="0 0 40 40" aria-hidden="true"><circle cx="9" cy="13" r="7.5" fill="#7d8f88"/><circle cx="31" cy="13" r="7.5" fill="#7d8f88"/><circle cx="9" cy="13" r="4" fill="#c9d6d0"/><circle cx="31" cy="13" r="4" fill="#c9d6d0"/><circle cx="20" cy="22" r="13" fill="#9aaba4"/><path d="M20 31.6C15.9 28.6 15.3 25.8 15.3 24.3C15.3 22.6 16.7 21.4 18.1 21.4C19 21.4 19.6 21.9 20 22.6C20.4 21.9 21 21.4 21.9 21.4C23.3 21.4 24.7 22.6 24.7 24.3C24.7 25.8 24.1 28.6 20 31.6Z" fill="#1d2622"/><circle cx="14" cy="19.5" r="1.7" fill="#1d2622"/><circle cx="26" cy="19.5" r="1.7" fill="#1d2622"/></svg>
+    <h1>Amor <b>Koala</b></h1>
+    <p id="login-txt">Entrá con tu cuenta de Google para compartir la lista, las fotos y las ventas entre los celulares del negocio.</p>
+    <button class="gbtn" type="button" id="login-google" disabled><svg viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9.1 3.6l6.8-6.8C35.8 2.4 30.3 0 24 0 14.6 0 6.6 5.4 2.7 13.2l7.9 6.2C12.5 13.6 17.8 9.5 24 9.5z"/><path fill="#4285F4" d="M46.5 24.5c0-1.6-.1-3.1-.4-4.5H24v9h12.7c-.6 3-2.3 5.5-4.8 7.2l7.7 6c4.5-4.2 6.9-10.3 6.9-17.7z"/><path fill="#FBBC05" d="M10.6 28.6c-.5-1.4-.8-3-.8-4.6s.3-3.2.8-4.6l-7.9-6.2C1 16.6 0 20.2 0 24s1 7.4 2.7 10.8l7.9-6.2z"/><path fill="#34A853" d="M24 48c6.5 0 11.9-2.1 15.9-5.8l-7.7-6c-2.1 1.4-4.9 2.3-8.2 2.3-6.2 0-11.5-4.1-13.4-9.8l-7.9 6.2C6.6 42.6 14.6 48 24 48z"/></svg><span id="login-gtxt">Cargando…</span></button>
+    <p class="login-msg" id="login-msg"></p>
+    <button class="link-btn" type="button" id="login-local">Usar sin cuenta (los datos quedan solo en este equipo)</button>
+  </div>
+</div>
+
+<!-- ===================== VENTANA: CUENTA ===================== -->
+<div class="overlay" id="m-cuenta" hidden>
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="cu-title" style="max-width:440px">
+    <header class="sheet-head"><div><h2 id="cu-title">Cuenta y sincronización</h2></div><button class="icon-btn" type="button" data-close aria-label="Cerrar"><svg class="i"><use href="#i-x"/></svg></button></header>
+    <div class="sheet-body"><div class="rows" id="cu-info"></div><p class="more" id="cu-txt" style="text-align:left;margin:0"></p></div>
+    <footer class="sheet-foot"><button class="btn" type="button" id="cu-salir">Cerrar sesión</button><button class="btn primary" type="button" id="cu-accion">Sincronizar ahora</button></footer>
   </div>
 </div>
 
@@ -1672,18 +1706,19 @@ function guardarClienteFrecuente(c) {
 }
 
 /* Cobrar */
-function siguienteNro(d) {
+function siguienteNro(d, vend) {
   const f = isoDate(d);
-  const n = S.ventas.filter(v => v.fecha === f).length + 1;
-  return pad(d.getDate()) + pad(d.getMonth() + 1) + '-' + pad(n, 3);
+  const n = S.ventas.filter(v => v.fecha === f && (v.vend || '') === (vend || '')).length + 1;
+  return (vend ? vend.charAt(0).toUpperCase() + '-' : '') + pad(d.getDate()) + pad(d.getMonth() + 1) + '-' + pad(n, 3);
 }
 $('#btn-cobrar').addEventListener('click', () => {
   if (!S.carrito.length) { toast('El carrito está vacío', 'warn'); return; }
   const t = totales();
   const now = new Date();
   const cli = leerCliente();
+  const vend = quienCorto();
   const v = {
-    id: uid('v'), ts: now.getTime(), upd: now.getTime(), fecha: isoDate(now), nro: siguienteNro(now),
+    id: uid('v'), ts: now.getTime(), upd: now.getTime(), fecha: isoDate(now), nro: siguienteNro(now, vend), vend,
     cliente: cli, medio: t.medio,
     tarjeta: t.medio === 'tj' ? {tipo:S.pago.tipo, plazo:S.pago.plazo, cuotas:t.cuotas, cuota:Math.round(t.cuota)} : null,
     items: S.carrito.map(i => ({co:i.co, de:i.de, ta:i.ta, cl:i.cl, qty:i.qty, precio:precioLinea(i)})),
@@ -1738,7 +1773,7 @@ function mostrarTicket(v, recien) {
   $('#mt-paper').innerHTML =
     (v.anulada ? '<div class="void">ANULADA</div>' : '') +
     '<div class="c"><h4>AMOR KOALA</h4><div class="muted">Indumentaria infantil</div>' +
-    '<div>Ticket N° ' + esc(v.nro) + '</div><div class="muted">' + fechaCorta(v.ts) + ' · ' + hora(v.ts) + '</div></div>' +
+    '<div>Ticket N° ' + esc(v.nro) + '</div><div class="muted">' + fechaCorta(v.ts) + ' · ' + hora(v.ts) + (v.vend ? ' · Atendió ' + esc(v.vend) : '') + '</div></div>' +
     ((c.n || c.a || c.d) ? '<hr><div>Cliente: ' + esc([c.n, c.a].filter(Boolean).join(' ')) + (c.d ? '<br>DNI/CUIT: ' + esc(c.d) : '') + '</div>' : '') +
     '<hr>' + items + '<hr>' +
     (v.recargo ? '<div class="pl"><span>Subtotal</span><span>' + fmt(v.subtotal) + '</span></div><div class="pl"><span>Recargo cuotas</span><span>' + fmt(v.recargo) + '</span></div>' : '') +
@@ -1954,7 +1989,7 @@ function renderHistorial() {
         '<span class="t">' + hora(v.ts) + (S.hist.desde !== S.hist.hasta ? '<br>' + v.fecha.slice(8) + '/' + v.fecha.slice(5, 7) : '') + '</span>' +
         '<span style="min-width:0"><span class="who" style="display:block">' + esc(quien) + '</span><span class="meta" style="display:block">' +
         (v.anulada ? '<span class="tag void">Anulada</span>' : '<span class="tag ' + v.medio + '">' + (v.medio === 'tj' ? 'Tarjeta' + (v.tarjeta && v.tarjeta.cuotas > 1 ? ' ' + v.tarjeta.cuotas + 'c' : '') : MEDIOS[v.medio]) + '</span>') +
-        'N° ' + esc(v.nro) + ' · ' + prendas + (prendas === 1 ? ' prenda' : ' prendas') + '</span></span>' +
+        'N° ' + esc(v.nro) + ' · ' + prendas + (prendas === 1 ? ' prenda' : ' prendas') + (v.vend ? ' · ' + esc(v.vend) : '') + '</span></span>' +
         '<span class="amt">' + fmt(v.total) + '</span></button>';
     }).join('') : '<div class="empty"><svg class="i"><use href="#i-list"/></svg><span>No hay ventas en estas fechas.</span></div>';
   } else {
@@ -2168,95 +2203,373 @@ $('#stock-input').addEventListener('change', async e => {
 });
 
 /* =========================================================
-   Sincronización (cuando se abre desde el link de Claude)
+   Nube compartida (Firebase): lista, ventas, clientes y fotos
    ========================================================= */
-const Nube = {db:null, listo:false};
+const FIREBASE_CONFIG = {
+  apiKey: 'AIzaSyCtulI09I4ahozpLAG8TTR5PV-i93AZfUQ',
+  authDomain: 'amor-koala.firebaseapp.com',
+  projectId: 'amor-koala',
+  storageBucket: 'amor-koala.firebasestorage.app',
+  messagingSenderId: '246265313672',
+  appId: '1:246265313672:web:88be7389d224b9c451e23d'
+};
+const FB_VER = '12.19.0';
+const FB_URL = n => 'https://www.gstatic.com/firebasejs/' + FB_VER + '/firebase-' + n + '-compat.js';
+const MARGEN = 10 * 60 * 1000;
+const Nube = {db:null, auth:null, user:null, conectado:false, vaciando:false, subs:[], iniciando:false, estado:'local'};
+const PEND = Object.assign({ventas:[], devoluciones:[], fotos:[], fotosMig:[], fotosDel:[], catalogo:false, clientes:false}, LS.get('pend', {}));
+const guardarPend = () => LS.set('pend', PEND);
+const SYNC = Object.assign({ventas:0, devoluciones:0, fotos:0}, LS.get('sync_marcas', {}));
+const FOTO_TS = LS.get('foto_ts', {});
+const guardarFotoTs = () => LS.set('foto_ts', FOTO_TS);
+const pendientesN = () => PEND.ventas.length + PEND.devoluciones.length + PEND.fotos.length + PEND.fotosMig.length + PEND.fotosDel.length + (PEND.catalogo ? 1 : 0) + (PEND.clientes ? 1 : 0);
+const idFoto = co => String(co).replace(/\//g, '_');
+const aDataURL = blob => new Promise((res, rej) => { const r = new FileReader(); r.onload = () => res(r.result); r.onerror = () => rej(r.error); r.readAsDataURL(blob); });
+function deDataURL(s) {
+  const i = s.indexOf(',');
+  const mime = (s.slice(0, i).match(/data:([^;]+)/) || [])[1] || 'image/jpeg';
+  const bin = atob(s.slice(i + 1));
+  const u = new Uint8Array(bin.length);
+  for (let k = 0; k < bin.length; k++) u[k] = bin.charCodeAt(k);
+  return new Blob([u], {type:mime});
+}
+function quien() { const u = Nube.user; return u ? (u.displayName || u.email || '') : ''; }
+function quienCorto() {
+  const u = Nube.user; if (!u) return '';
+  const n = (u.displayName || '').trim().split(/\s+/)[0] || (u.email || '').split('@')[0];
+  return cap(n.replace(/[^\p{L}\p{N}]/gu, '')) || '';
+}
+
 function setSync(st) {
+  Nube.estado = st;
   const b = $('#sync');
   b.dataset.st = st;
-  $('#sync-txt').textContent = {local:'En este equipo', sync:'Sincronizando', ok:'Sincronizado', error:'Sin sincronizar'}[st] || st;
+  $('#sync-txt').textContent = {local:'Sin cuenta', sync:'Sincronizando', ok:'Sincronizado', error:'Sin sincronizar', offline:'Sin internet'}[st] || st;
+  if (!$('#m-cuenta').hidden) renderCuenta();
 }
-$('#sync').addEventListener('click', () => {
-  const st = $('#sync').dataset.st;
-  toast(st === 'local' ? 'Las ventas se guardan en este celu o compu. Usá «Guardar respaldo» en Historial para pasarlas a otro equipo.' :
-    st === 'error' ? 'Hay cambios que no se pudieron subir. Se reintenta solo al volver a abrir.' :
-    'Ventas, devoluciones, clientes y stock se comparten entre tus equipos.', '');
+function renderCuenta() {
+  const u = Nube.user;
+  const n = pendientesN();
+  const estado = {local:'Sin cuenta', sync:'Sincronizando…', ok:'Todo al día', error:'Hubo un problema', offline:'Sin internet'}[Nube.estado] || Nube.estado;
+  const lista = CAT_META ? CAT_META.fuente + ' · ' + fechaCorta(CAT_META.ts) + ' ' + hora(CAT_META.ts) : 'Sin cargar';
+  $('#cu-info').innerHTML =
+    '<div class="row"><span>Cuenta</span><span>' + esc(u ? (u.email || quien()) : 'Sin cuenta') + '</span></div>' +
+    '<div class="row"><span>Estado</span><span>' + esc(estado) + '</span></div>' +
+    '<div class="row"><span>Cambios por subir</span><span class="num">' + n + '</span></div>' +
+    '<div class="row"><span>Lista en uso</span><span>' + esc(lista) + '</span></div>';
+  $('#cu-txt').textContent = u
+    ? 'La lista, las fotos, las ventas, las devoluciones y los clientes se comparten con los celulares del negocio. Si no hay internet, se guardan acá y se suben solos cuando vuelve.'
+    : 'Sin cuenta, todo queda solo en este equipo. Entrá con Google para compartir con los celulares del negocio.';
+  $('#cu-salir').hidden = !u;
+  $('#cu-accion').textContent = u ? 'Sincronizar ahora' : 'Entrar con Google';
+}
+$('#sync').addEventListener('click', () => { renderCuenta(); abrirVentana('m-cuenta'); });
+$('#cu-accion').addEventListener('click', () => {
+  if (Nube.user) { escuchar(); vaciarPendientes(); toast('Sincronizando…', ''); return; }
+  cerrarVentana('m-cuenta');
+  LS.del('sin_cuenta');
+  mostrarLogin('entrar');
+  if (!Nube.auth) iniciarNube();
 });
-async function nubeGuardar(col, obj) {
-  if (!Nube.db) return false;
-  const ref = Nube.db.collection(col).doc(obj.id);
-  for (let i = 0; i < 2; i++) {
-    try { await ref.set(clone(obj)); return true; }
-    catch (e) { if (!e || e.code !== 'unavailable' || i) { setSync('error'); return false; } await sleep(400 + Math.random() * 600); }
+$('#cu-salir').addEventListener('click', async () => {
+  if (pendientesN() && !(await confirmar('¿Cerrar sesión?', 'Hay ' + pendientesN() + ' cambios sin subir. Se van a subir cuando vuelvas a entrar.', 'Cerrar sesión'))) return;
+  cerrarVentana('m-cuenta');
+  try { await Nube.auth.signOut(); } catch (e) {}
+});
+
+/* Pantalla de entrada */
+function mostrarLogin(modo, extra) {
+  const txt = $('#login-txt'), msg = $('#login-msg');
+  msg.textContent = '';
+  if (modo === 'sinpermiso') {
+    txt.textContent = 'La cuenta ' + (extra || '') + ' no tiene permiso para usar la app del negocio. Entrá con una cuenta del negocio.';
+    $('#login-gtxt').textContent = 'Entrar con otra cuenta';
+  } else {
+    txt.textContent = 'Entrá con tu cuenta de Google para compartir la lista, las fotos y las ventas entre los celulares del negocio.';
+    $('#login-gtxt').textContent = Nube.auth ? 'Entrar con Google' : 'Cargando…';
   }
-  return false;
+  $('#login-google').disabled = !Nube.auth;
+  $('#login').hidden = false;
 }
-let clientesTimer = null;
-function nubeGuardarClientes() {
-  if (!Nube.db) return;
-  clearTimeout(clientesTimer);
-  clientesTimer = setTimeout(async () => {
-    try { await Nube.db.doc('meta/clientes').set({lista:S.clientes.slice(0, 1500), upd:Date.now()}); } catch (e) { setSync('error'); }
-  }, 800);
-}
-async function nubeGuardarCatalogo() {
-  if (!Nube.db) return;
-  try { await Nube.db.doc('meta/catalogo').set(CAT_META ? {rows:CAT_ROWS, ts:CAT_META.ts, fuente:CAT_META.fuente} : {rows:[], ts:Date.now(), fuente:''}); }
-  catch (e) { setSync('error'); }
-}
-function suscribir(col, clave, lsKey) {
-  let primera = true;
-  Nube.db.collection(col).orderBy('ts', 'desc').limit(1000).onSnapshot(async snap => {
-    let cambio = false;
-    const ids = new Set();
-    let minTs = Infinity;
-    for (const d of snap.docs) {
-      const data = d.data(); if (!data) continue;
-      ids.add(d.id); minTs = Math.min(minTs, data.ts || 0);
-      const l = S[clave].find(x => x.id === d.id);
-      if (!l) { S[clave].push(clone(data)); cambio = true; }
-      else if ((data.upd || 0) > (l.upd || 0)) { Object.assign(l, clone(data)); cambio = true; }
+function ocultarLogin() { $('#login').hidden = true; }
+$('#login-local').addEventListener('click', () => {
+  LS.set('sin_cuenta', true);
+  ocultarLogin();
+  setSync('local');
+  toast('Usás la app sin cuenta. Podés entrar cuando quieras tocando el punto de arriba.', '');
+});
+$('#login-google').addEventListener('click', async () => {
+  if (!Nube.auth) return;
+  const msg = $('#login-msg');
+  msg.textContent = '';
+  const prov = new firebase.auth.GoogleAuthProvider();
+  try { prov.setCustomParameters({prompt:'select_account'}); } catch (e) {}
+  try {
+    if (Nube.user) await Nube.auth.signOut();
+    await Nube.auth.signInWithPopup(prov);
+  } catch (e) {
+    const c = (e && e.code) || '';
+    if (c === 'auth/popup-closed-by-user' || c === 'auth/cancelled-popup-request') return;
+    if (c === 'auth/popup-blocked' || c === 'auth/operation-not-supported-in-this-environment') {
+      try { await Nube.auth.signInWithRedirect(prov); return; } catch (e2) {}
     }
-    if (cambio) { LS.set(lsKey, S[clave]); if (S.tab === 'historial') renderHistorial(); }
-    if (primera) {
-      primera = false;
-      const pend = S[clave].filter(x => !ids.has(x.id) && (snap.size < 1000 || (x.ts || 0) >= minTs));
-      let ok = true;
-      for (const x of pend) ok = (await nubeGuardar(col, x)) && ok;
-      Nube.pend = (Nube.pend || 0) - 1;
-      if (Nube.pend <= 0 && $('#sync').dataset.st !== 'error') setSync(ok ? 'ok' : 'error');
-    }
-  }, () => setSync('error'));
-}
+    msg.textContent = c === 'auth/network-request-failed' ? 'No hay internet. Probá de nuevo cuando tengas conexión.' :
+      c === 'auth/unauthorized-domain' ? 'Falta autorizar esta dirección en Firebase (Authentication → Configuración → Dominios autorizados).' :
+      'No se pudo entrar' + (c ? ' (' + c.replace('auth/', '') + ')' : '') + '. Si sigue pasando, abrí la app desde Chrome y probá ahí.';
+  }
+});
+
+/* Arranque de la nube */
 async function iniciarNube() {
-  if (!(window.claude && typeof window.claude.use === 'function')) return;
-  let db = null;
-  try { db = await window.claude.use('db'); } catch (e) {}
-  if (!db) return;
-  Nube.db = db;
-  setSync('sync');
+  if (Nube.auth || Nube.iniciando) return;
+  if (enMarco() || !/^https?:$/.test(location.protocol)) return;
+  Nube.iniciando = true;
+  if (LS.get('sin_cuenta', false)) setSync('local');
   try {
-    const c = await db.doc('meta/clientes').get();
-    if (c.exists) {
-      let agregados = 0;
-      for (const x of ((c.data() || {}).lista || [])) if (!S.clientes.some(y => y.n === x.n && y.a === x.a && y.d === x.d)) { S.clientes.push(clone(x)); agregados++; }
-      LS.set('clientes', S.clientes);
-      if (S.clientes.length > ((c.data() || {}).lista || []).length) nubeGuardarClientes();
-    } else if (S.clientes.length) nubeGuardarClientes();
-  } catch (e) {}
+    await cargarScript(FB_URL('app'), () => !!(window.firebase && window.firebase.initializeApp));
+    await Promise.all([
+      cargarScript(FB_URL('auth'), () => !!(window.firebase && window.firebase.auth)),
+      cargarScript(FB_URL('firestore'), () => !!(window.firebase && window.firebase.firestore))
+    ]);
+  } catch (e) {
+    Nube.iniciando = false;
+    setSync(navigator.onLine === false ? 'offline' : (LS.get('sin_cuenta', false) ? 'local' : 'error'));
+    return;
+  }
   try {
-    const k = await db.doc('meta/catalogo').get();
-    const d = k.exists ? k.data() : null;
-    const tsLocal = CAT_META ? CAT_META.ts : 0;
-    if (d && d.ts > tsLocal) {
-      if (d.rows && d.rows.length) aplicarCatalogoSinSubir(clone(d.rows), {ts:d.ts, fuente:d.fuente});
-      else if (CAT_META) aplicarCatalogoSinSubir(BASE.rows, null);
-    } else if (CAT_META && (!d || d.ts < tsLocal)) nubeGuardarCatalogo();
-  } catch (e) {}
-  Nube.pend = 2;
-  suscribir('ventas', 'ventas', 'ventas');
-  suscribir('devoluciones', 'devs', 'devs');
+    if (!firebase.apps.length) firebase.initializeApp(FIREBASE_CONFIG);
+    Nube.db = firebase.firestore();
+    try { Nube.db.settings({ignoreUndefinedProperties:true, merge:true}); } catch (e) {}
+    Nube.auth = firebase.auth();
+    try { Nube.auth.useDeviceLanguage(); } catch (e) {}
+  } catch (e) { Nube.iniciando = false; setSync('error'); return; }
+  Nube.iniciando = false;
+  if (!$('#login').hidden) mostrarLogin('entrar');
+  try { Nube.auth.getRedirectResult().catch(() => {}); } catch (e) {}
+  Nube.auth.onAuthStateChanged(u => { if (u) conectar(u); else desconectar(); });
 }
+function desuscribir() { for (const f of Nube.subs) { try { f(); } catch (e) {} } Nube.subs = []; }
+function desconectar() {
+  desuscribir();
+  Nube.user = null; Nube.conectado = false;
+  setSync('local');
+  if (!LS.get('sin_cuenta', false)) mostrarLogin('entrar');
+}
+function sinPermiso() {
+  desuscribir();
+  Nube.conectado = false;
+  setSync('error');
+  mostrarLogin('sinpermiso', Nube.user ? Nube.user.email : '');
+}
+async function conectar(u) {
+  Nube.user = u;
+  LS.del('sin_cuenta');
+  ocultarLogin();
+  setSync(navigator.onLine === false ? 'offline' : 'sync');
+  try { await Nube.db.doc('meta/clientes').get(); }
+  catch (e) { if (e && e.code === 'permission-denied') { sinPermiso(); return; } }
+  Nube.conectado = true;
+  if (LS.get('migrado', '') !== u.uid) {
+    for (const v of S.ventas) if (!PEND.ventas.includes(v.id)) PEND.ventas.push(v.id);
+    for (const d of S.devs) if (!PEND.devoluciones.includes(d.id)) PEND.devoluciones.push(d.id);
+    if (S.clientes.length) PEND.clientes = true;
+    try { for (const co of await FotoDB.claves()) if (!FOTO_TS[co] && !PEND.fotosMig.includes(co) && !PEND.fotos.includes(co)) PEND.fotosMig.push(co); } catch (e) {}
+    guardarPend();
+    LS.set('migrado', u.uid);
+  }
+  escuchar();
+  vaciarPendientes();
+}
+function errorNube(e) {
+  if (e && e.code === 'permission-denied') sinPermiso();
+  else setSync('error');
+}
+function escuchar() {
+  if (!Nube.conectado) return;
+  desuscribir();
+  const db = Nube.db;
+  Nube.subs.push(db.doc('meta/catalogo').onSnapshot(recibirCatalogo, errorNube));
+  Nube.subs.push(db.doc('meta/clientes').onSnapshot(recibirClientes, errorNube));
+  for (const col of ['ventas', 'devoluciones']) {
+    Nube.subs.push(db.collection(col).where('upd', '>', Math.max(0, (SYNC[col] || 0) - MARGEN)).orderBy('upd').onSnapshot(snap => recibirMovs(col, snap), errorNube));
+  }
+  Nube.subs.push(db.collection('fotos').where('ts', '>', Math.max(0, (SYNC.fotos || 0) - MARGEN)).orderBy('ts').onSnapshot(recibirFotos, errorNube));
+}
+function recibirCatalogo(snap) {
+  const tsLocal = CAT_META ? CAT_META.ts : 0;
+  if (!snap.exists) { if (CAT_META) { PEND.catalogo = true; guardarPend(); vaciarPendientes(); } return; }
+  const d = snap.data() || {};
+  if ((d.ts || 0) > tsLocal && d.json) {
+    try {
+      aplicarCatalogoSinSubir(JSON.parse(d.json), {ts:d.ts, fuente:d.fuente || 'Lista compartida'});
+      toast('Lista actualizada' + (d.por ? ' por ' + d.por : ''), 'ok');
+    } catch (e) {}
+  } else if (CAT_META && tsLocal > (d.ts || 0)) { PEND.catalogo = true; guardarPend(); vaciarPendientes(); }
+}
+function claveCliente(c) { return norm(c.n) + '|' + norm(c.a) + '|' + (c.d || ''); }
+function recibirClientes(snap) {
+  const lista = snap.exists ? ((snap.data() || {}).lista || []) : [];
+  const ya = new Set(S.clientes.map(claveCliente));
+  let nuevos = 0;
+  for (const c of lista) if (!ya.has(claveCliente(c))) { S.clientes.push({n:c.n || '', a:c.a || '', d:c.d || ''}); ya.add(claveCliente(c)); nuevos++; }
+  if (nuevos) LS.set('clientes', S.clientes);
+  const remotos = new Set(lista.map(claveCliente));
+  if (S.clientes.some(c => !remotos.has(claveCliente(c)))) { PEND.clientes = true; guardarPend(); vaciarPendientes(); }
+}
+function recibirMovs(col, snap) {
+  const arr = col === 'ventas' ? S.ventas : S.devs;
+  let cambio = false, max = SYNC[col] || 0;
+  for (const ch of snap.docChanges()) {
+    if (ch.type === 'removed') continue;
+    const d = ch.doc.data(); if (!d || !d.id) continue;
+    max = Math.max(max, d.upd || 0);
+    const l = arr.find(x => x.id === d.id);
+    if (!l) { arr.push(clone(d)); cambio = true; }
+    else if ((d.upd || 0) > (l.upd || 0)) { Object.assign(l, clone(d)); cambio = true; }
+  }
+  if (max > (SYNC[col] || 0)) { SYNC[col] = max; LS.set('sync_marcas', SYNC); }
+  if (cambio) { LS.set(col === 'ventas' ? 'ventas' : 'devs', arr); if (S.tab === 'historial') renderHistorial(); }
+  if (!pendientesN() && Nube.estado === 'sync') setSync('ok');
+}
+async function recibirFotos(snap) {
+  let cambio = false, max = SYNC.fotos || 0;
+  for (const ch of snap.docChanges()) {
+    if (ch.type === 'removed') continue;
+    const co = ch.doc.id, d = ch.doc.data() || {};
+    max = Math.max(max, d.ts || 0);
+    if ((d.ts || 0) <= (FOTO_TS[co] || 0)) continue;
+    try {
+      if (d.borrado) { await FotoDB.del(co); ponerThumb(co, null); CAT.sel.delete(co); }
+      else if (d.thumb) { const b = deDataURL(d.thumb); await FotoDB.putThumb(co, b); await FotoDB.delFull(co); ponerThumb(co, b); }
+      FOTO_TS[co] = d.ts || Date.now();
+      PEND.fotosMig = PEND.fotosMig.filter(x => x !== co);
+      cambio = true;
+    } catch (e) {}
+  }
+  if (max > (SYNC.fotos || 0)) { SYNC.fotos = max; LS.set('sync_marcas', SYNC); }
+  if (cambio) { guardarFotoTs(); guardarPend(); guardarSel(); refrescarFotos(); }
+}
+async function fotoCompleta(co) {
+  let b = null;
+  try { b = await FotoDB.full(co); } catch (e) {}
+  if (b || !Nube.db) return b;
+  try {
+    const snap = await Nube.db.collection('publico').doc('f-' + idFoto(co)).get();
+    const d = snap.exists ? snap.data() : null;
+    if (d && d.full) { b = deDataURL(d.full); try { await FotoDB.putFull(co, b); } catch (e) {} }
+  } catch (e) {}
+  return b;
+}
+
+/* Lo que se sube */
+function catalogoPublico() {
+  const items = [];
+  for (const g of GROUPS) {
+    if (g.oculto) continue;
+    const con = g.variants.filter(v => v.st > 0);
+    if (!con.length) continue;
+    const pv = con.map(v => v.pv), pt = con.map(v => v.pt);
+    items.push({co:g.co, de:g.de, mr:g.mr || '', para:g.para, tipo:g.tipo,
+      ef:[Math.min(...pv), Math.max(...pv)], tj:[Math.min(...pt), Math.max(...pt)],
+      talles:[...new Set(con.map(v => v.ta))], colores:[...new Set(con.map(v => v.cl).filter(Boolean))]});
+  }
+  return {json:JSON.stringify(items), ts:CAT_META ? CAT_META.ts : Date.now(), n:items.length};
+}
+function nubeGuardar(col, obj) {
+  if (obj && obj.id && !PEND[col].includes(obj.id)) { PEND[col].push(obj.id); guardarPend(); }
+  vaciarPendientes();
+  return Promise.resolve(true);
+}
+function nubeGuardarClientes() { PEND.clientes = true; guardarPend(); vaciarPendientes(); }
+function nubeGuardarCatalogo() { if (CAT_META) { PEND.catalogo = true; guardarPend(); vaciarPendientes(); } }
+function nubeGuardarFoto(co) {
+  FOTO_TS[co] = Date.now(); guardarFotoTs();
+  PEND.fotosDel = PEND.fotosDel.filter(x => x !== co);
+  PEND.fotosMig = PEND.fotosMig.filter(x => x !== co);
+  if (!PEND.fotos.includes(co)) PEND.fotos.push(co);
+  guardarPend(); vaciarPendientes();
+}
+function nubeBorrarFoto(co) {
+  FOTO_TS[co] = Date.now(); guardarFotoTs();
+  PEND.fotos = PEND.fotos.filter(x => x !== co);
+  PEND.fotosMig = PEND.fotosMig.filter(x => x !== co);
+  if (!PEND.fotosDel.includes(co)) PEND.fotosDel.push(co);
+  guardarPend(); vaciarPendientes();
+}
+let vaciarTimer = null;
+function vaciarPendientes() { clearTimeout(vaciarTimer); vaciarTimer = setTimeout(vaciar, 400); }
+function quitarPend(lista, x) { PEND[lista] = PEND[lista].filter(y => y !== x); guardarPend(); }
+async function subirFoto(co, soloSiNoExiste) {
+  const db = Nube.db;
+  if (soloSiNoExiste) {
+    const s = await db.collection('fotos').doc(idFoto(co)).get();
+    if (s.exists && !(s.data() || {}).borrado) return;
+    FOTO_TS[co] = FOTO_TS[co] || Date.now(); guardarFotoTs();
+  }
+  const [full, thumb] = await Promise.all([FotoDB.full(co), FotoDB.thumb(co)]);
+  if (!full || !thumb) return;
+  const ts = FOTO_TS[co] || Date.now();
+  await db.collection('publico').doc('f-' + idFoto(co)).set({full:await aDataURL(full), ts});
+  await db.collection('fotos').doc(idFoto(co)).set({thumb:await aDataURL(thumb), ts});
+}
+async function vaciar() {
+  if (!Nube.conectado || Nube.vaciando) return;
+  if (navigator.onLine === false) { setSync('offline'); return; }
+  if (!pendientesN()) { setSync('ok'); return; }
+  Nube.vaciando = true;
+  setSync('sync');
+  let error = false;
+  const db = Nube.db;
+  const paso = async (fn, alFallarDescartar) => {
+    try { await fn(); return true; }
+    catch (e) {
+      if (e && e.code === 'permission-denied') throw e;
+      if (e && (e.code === 'invalid-argument' || e.code === 'out-of-range') && alFallarDescartar) { alFallarDescartar(); return false; }
+      throw e;
+    }
+  };
+  try {
+    if (PEND.catalogo && CAT_META) {
+      await db.doc('meta/catalogo').set({json:JSON.stringify(CAT_ROWS), ts:CAT_META.ts, fuente:CAT_META.fuente || '', por:quienCorto()});
+      await db.doc('publico/catalogo').set(catalogoPublico());
+    }
+    if (PEND.catalogo) { PEND.catalogo = false; guardarPend(); }
+    if (PEND.clientes) {
+      await db.doc('meta/clientes').set({lista:clone(S.clientes.slice(0, 1500)), upd:Date.now()});
+      PEND.clientes = false; guardarPend();
+    }
+    for (const col of ['ventas', 'devoluciones']) {
+      const arr = col === 'ventas' ? S.ventas : S.devs;
+      for (const id of PEND[col].slice()) {
+        const o = arr.find(x => x.id === id);
+        if (o) { if (!o.upd) o.upd = o.ts || Date.now(); await paso(() => db.collection(col).doc(id).set(clone(o)), () => {}); }
+        quitarPend(col, id);
+      }
+    }
+    for (const co of PEND.fotosDel.slice()) {
+      const ts = FOTO_TS[co] || Date.now();
+      await db.collection('publico').doc('f-' + idFoto(co)).delete();
+      await db.collection('fotos').doc(idFoto(co)).set({borrado:true, ts});
+      quitarPend('fotosDel', co);
+    }
+    for (const co of PEND.fotos.slice()) {
+      await paso(() => subirFoto(co, false), () => toast('La foto de ' + co + ' es muy pesada para compartir.', 'warn'));
+      quitarPend('fotos', co);
+    }
+    for (const co of PEND.fotosMig.slice()) {
+      await paso(() => subirFoto(co, true), () => {});
+      quitarPend('fotosMig', co);
+    }
+  } catch (e) {
+    error = true;
+    if (e && e.code === 'permission-denied') { Nube.vaciando = false; sinPermiso(); return; }
+  }
+  Nube.vaciando = false;
+  if (error) { setSync(navigator.onLine === false ? 'offline' : 'error'); return; }
+  if (pendientesN()) vaciarPendientes(); else setSync('ok');
+}
+window.addEventListener('online', () => { if (!Nube.auth) iniciarNube(); else { setSync('sync'); vaciarPendientes(); } });
+window.addEventListener('offline', () => { if (Nube.user) setSync('offline'); });
 function aplicarCatalogoSinSubir(rows, meta) {
   CAT_ROWS = rows; CAT_META = meta;
   if (meta) { LS.set('catalogo', rows); LS.set('catalogo_meta', meta); } else { LS.del('catalogo'); LS.del('catalogo_meta'); }
@@ -2301,9 +2614,13 @@ const FotoDB = (() => {
   }
   return {
     put: (co, full, thumb) => tx(['full', 'thumb'], 'readwrite', t => { t.objectStore('full').put(full, co); t.objectStore('thumb').put(thumb, co); }),
+    putThumb: (co, thumb) => tx(['thumb'], 'readwrite', t => { t.objectStore('thumb').put(thumb, co); }),
+    putFull: (co, full) => tx(['full'], 'readwrite', t => { t.objectStore('full').put(full, co); }),
+    delFull: co => tx(['full'], 'readwrite', t => { t.objectStore('full').delete(co); }),
     del: co => tx(['full', 'thumb'], 'readwrite', t => { t.objectStore('full').delete(co); t.objectStore('thumb').delete(co); }),
     full: async co => { const db = await abrir(); return pedido(db.transaction('full').objectStore('full').get(co)); },
-    claves: async () => { const db = await abrir(); return pedido(db.transaction('full').objectStore('full').getAllKeys()); },
+    thumb: async co => { const db = await abrir(); return pedido(db.transaction('thumb').objectStore('thumb').get(co)); },
+    claves: async () => { const db = await abrir(); return pedido(db.transaction('thumb').objectStore('thumb').getAllKeys()); },
     thumbs: async () => {
       const db = await abrir();
       const st = db.transaction('thumb').objectStore('thumb');
@@ -2349,11 +2666,12 @@ let persistPedido = false;
 async function procesarYGuardarFoto(co, blob, esRespaldo) {
   const img = await abrirImagen(blob);
   const [w, h] = medidas(img);
-  const full = esRespaldo && Math.max(w, h) <= 1600 ? new Blob([blob], {type:'image/jpeg'}) : await aJpeg(img, 1440, 0.85);
-  const thumb = await aJpeg(img, 320, 0.78);
+  const full = esRespaldo && Math.max(w, h) <= 1200 ? new Blob([blob], {type:'image/jpeg'}) : await aJpeg(img, 1200, 0.8);
+  const thumb = await aJpeg(img, 320, 0.75);
   if (img.close) img.close();
   await FotoDB.put(co, full, thumb);
   ponerThumb(co, thumb);
+  nubeGuardarFoto(co);
   if (!persistPedido && navigator.storage && navigator.storage.persist) { persistPedido = true; navigator.storage.persist().catch(() => {}); }
 }
 function refrescarFotos() {
@@ -2372,9 +2690,10 @@ $('#foto-prod-input').addEventListener('change', async e => {
   catch (err) { noBusy(); toast('No se pudo guardar la foto. Probá con otra o revisá el espacio del celu.', 'warn'); }
 });
 async function quitarFoto(co) {
-  if (!(await confirmar('¿Quitar la foto?', 'Se borra la foto de ' + co + ' de este equipo.', 'Quitar'))) return;
+  if (!(await confirmar('¿Quitar la foto?', Nube.user ? 'Se borra la foto de ' + co + ' en todos los celulares del negocio.' : 'Se borra la foto de ' + co + ' de este equipo.', 'Quitar'))) return;
   try { await FotoDB.del(co); } catch (e) {}
   ponerThumb(co, null);
+  nubeBorrarFoto(co);
   CAT.sel.delete(co); guardarSel();
   refrescarFotos();
 }
@@ -2390,7 +2709,7 @@ function renderFotoFicha() {
   if (u) {
     box.classList.add('has');
     box.innerHTML = '<img alt="Foto de ' + esc(g.de) + '" src="' + u + '">';
-    FotoDB.full(g.co).then(b => {
+    fotoCompleta(g.co).then(b => {
       if (!b || MP.g !== g) return;
       fichaUrl = URL.createObjectURL(b);
       const im = box.querySelector('img'); if (im) im.src = fichaUrl;
@@ -2558,7 +2877,7 @@ function disenoTarjeta(ctx, g, opts, W, PH, dibujar) {
   return y + 12;
 }
 async function imagenParaCompartir(g, opts) {
-  const blob = await FotoDB.full(g.co);
+  const blob = await fotoCompleta(g.co);
   if (!blob) return null;
   const img = await abrirImagen(blob);
   const [iw, ih] = medidas(img);
@@ -2689,7 +3008,7 @@ $('#f-export').addEventListener('click', async () => {
   try {
     await cargarScript(JSZIP_URL, () => !!window.JSZip);
     const zip = new window.JSZip();
-    for (const co of claves) { const b = await FotoDB.full(co); if (b) zip.file(co + '.jpg', b); }
+    for (const co of claves) { const b = await fotoCompleta(co); if (b) zip.file(co + '.jpg', b); }
     const out = await zip.generateAsync({type:'blob', compression:'STORE'});
     noBusy();
     guardarArchivo('fotos_amor_koala_' + hoyISO() + '.zip', out, 'application/zip');
@@ -2797,7 +3116,7 @@ try {
   }
 } catch (e) {}
 
-window.__ak = {S, totales, precioCuotas, procesarCodigo, BYCODE, THUMBS, CAT, SH, FotoDB, FIL, buscar, parseQ};
+window.__ak = {Nube, PEND, FOTO_TS, S, totales, precioCuotas, procesarCodigo, BYCODE, THUMBS, CAT, SH, FotoDB, FIL, buscar, parseQ};
 })();
 </script>
 </body></html>

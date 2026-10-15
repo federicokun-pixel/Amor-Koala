@@ -1,12 +1,15 @@
 /* Amor Koala: guarda la app en el celu para que abra rápido y sin internet. */
-const VERSION = 'ak-v1';
+const VERSION = 'ak-v2';
 const BASICOS = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png'];
 const LIBRERIAS = [
   'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js',
   'https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js',
-  'https://cdn.jsdelivr.net/npm/@zxing/library@0.21.3/umd/index.min.js'
+  'https://cdn.jsdelivr.net/npm/@zxing/library@0.21.3/umd/index.min.js',
+  'https://www.gstatic.com/firebasejs/12.19.0/firebase-app-compat.js',
+  'https://www.gstatic.com/firebasejs/12.19.0/firebase-auth-compat.js',
+  'https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore-compat.js'
 ];
-const EXTERNOS = /^(cdnjs\.cloudflare\.com|cdn\.jsdelivr\.net|fonts\.googleapis\.com|fonts\.gstatic\.com)$/;
+const EXTERNOS = /^(cdnjs\.cloudflare\.com|cdn\.jsdelivr\.net|fonts\.googleapis\.com|fonts\.gstatic\.com|www\.gstatic\.com)$/;
 
 self.addEventListener('install', e => {
   e.waitUntil((async () => {
