@@ -647,7 +647,7 @@ select.inp{appearance:none;background-image:linear-gradient(45deg,transparent 50
           <button type="button" role="radio" data-p="no" aria-checked="false">Sin precio</button>
         </div>
       </div>
-      <div class="chips"><button class="chip" type="button" id="sh-talles" aria-pressed="true">Mostrar talles con stock</button></div>
+      <div class="chips"><button class="chip" type="button" id="sh-talles" aria-pressed="true">Mostrar talles con stock</button><button class="chip" type="button" id="sh-nombre" aria-pressed="false">Mostrar nombre de la prenda</button></div>
       <div class="warnbox" id="sh-warn" hidden><svg class="i"><use href="#i-warn"/></svg><span id="sh-warn-txt" style="flex:1"></span><button class="btn sm" type="button" id="sh-warn-btn">Sacarlas</button></div>
       <div class="progress" id="sh-prog" hidden><i></i></div>
       <p class="more" id="sh-status" style="text-align:left;margin:0"></p>
@@ -2484,7 +2484,7 @@ $('#sel-clear').addEventListener('click', () => { CAT.sel.clear(); guardarSel();
 $('#sel-send').addEventListener('click', () => abrirEnvio([...CAT.sel]));
 
 /* Imagen con el precio para mandar */
-const SHARE = Object.assign({precio:'ambos', talles:true}, LS.get('share_opts', {}));
+const SHARE = Object.assign({precio:'ambos', talles:true, nombre:false}, LS.get('share_opts', {}));
 async function fuentesListas() {
   if (!document.fonts || !document.fonts.load) return;
   try { await Promise.race([Promise.all(['700 54px "DM Sans"', '600 26px "DM Sans"', '500 64px "DM Mono"'].map(f => document.fonts.load(f))), sleep(2000)]); } catch (e) {}
@@ -2517,14 +2517,18 @@ function disenoTarjeta(ctx, g, opts, W, PH, dibujar) {
     try { ctx.letterSpacing = '4px'; } catch (e) {}
     ctx.fillText('AMOR KOALA', P, y);
     try { ctx.letterSpacing = '0px'; } catch (e) {}
-    ctx.fillStyle = '#6b746f'; ctx.font = '500 26px ' + MONO; ctx.textAlign = 'right';
-    ctx.fillText(g.co, W - P, y); ctx.textAlign = 'left';
+    if (opts.nombre) { ctx.fillStyle = '#6b746f'; ctx.font = '500 26px ' + MONO; ctx.textAlign = 'right'; ctx.fillText(g.co, W - P, y); ctx.textAlign = 'left'; }
   }
   y += 28 + 22;
-  ctx.font = '700 54px ' + SANS;
-  const nombre = partirLineas(ctx, g.de, W - 2 * P, 2);
-  if (dibujar) { ctx.fillStyle = '#17201b'; nombre.forEach((l, i) => ctx.fillText(l, P, y + i * 64)); }
-  y += nombre.length * 64 + 8;
+  if (opts.nombre) {
+    ctx.font = '700 54px ' + SANS;
+    const nombre = partirLineas(ctx, g.de, W - 2 * P, 2);
+    if (dibujar) { ctx.fillStyle = '#17201b'; nombre.forEach((l, i) => ctx.fillText(l, P, y + i * 64)); }
+    y += nombre.length * 64 + 8;
+  } else {
+    if (dibujar) { ctx.fillStyle = '#17201b'; ctx.font = '600 68px ' + MONO; ctx.fillText(g.co, P, y); }
+    y += 72 + 10;
+  }
   const talles = opts.talles ? [...new Set(g.variants.filter(v => v.st > 0).map(v => v.ta).filter(Boolean))] : [];
   if (talles.length) {
     if (dibujar) { ctx.fillStyle = '#4b5550'; ctx.font = '500 34px ' + SANS; ctx.fillText(partirLineas(ctx, 'Talles ' + talles.join(' · '), W - 2 * P, 1)[0], P, y); }
@@ -2579,7 +2583,7 @@ function textoPrecios(codes, opts) {
     if (opts.precio === 'ambos' || opts.precio === 'ef') p.push('Efectivo ' + precioTxt(g.pvMin, g.pvMax));
     if (opts.precio === 'ambos' || opts.precio === 'tj') p.push('Tarjeta ' + precioTxt(g.ptMin, g.ptMax));
     const t = opts.talles ? [...new Set(g.variants.filter(v => v.st > 0).map(v => v.ta).filter(Boolean))] : [];
-    return '• ' + g.de + ' (' + g.co + ')' + (p.length ? ': ' + p.join(' / ') : '') + (t.length ? ' · Talles ' + t.join(', ') : '');
+    return '• ' + (opts.nombre ? g.de + ' (' + g.co + ')' : g.co) + (p.length ? ': ' + p.join(' / ') : '') + (t.length ? ' · Talles ' + t.join(', ') : '');
   }).filter(Boolean)).join('\n');
 }
 const SH = {codes:[], files:[], urls:[], gen:0};
@@ -2587,6 +2591,7 @@ function puedeCompartir(files) { try { return !!(navigator.share && navigator.ca
 function renderOpcionesEnvio() {
   for (const b of $$('#sh-precio button')) b.setAttribute('aria-checked', String(b.dataset.p === SHARE.precio));
   $('#sh-talles').setAttribute('aria-pressed', String(!!SHARE.talles));
+  $('#sh-nombre').setAttribute('aria-pressed', String(!!SHARE.nombre));
 }
 function abrirEnvio(codes) {
   SH.codes = codes.filter(co => THUMBS.has(co) && BYCODE.has(co)).slice(0, MAX_ENVIO);
@@ -2653,6 +2658,7 @@ async function prepararEnvio() {
 }
 $('#sh-precio').addEventListener('click', e => { const b = e.target.closest('[data-p]'); if (!b || b.dataset.p === SHARE.precio) return; SHARE.precio = b.dataset.p; LS.set('share_opts', SHARE); renderOpcionesEnvio(); prepararEnvio(); });
 $('#sh-talles').addEventListener('click', () => { SHARE.talles = !SHARE.talles; LS.set('share_opts', SHARE); renderOpcionesEnvio(); prepararEnvio(); });
+$('#sh-nombre').addEventListener('click', () => { SHARE.nombre = !SHARE.nombre; LS.set('share_opts', SHARE); renderOpcionesEnvio(); prepararEnvio(); });
 $('#sh-go').addEventListener('click', async () => {
   const files = SH.files.slice();
   if (!files.length) return;
